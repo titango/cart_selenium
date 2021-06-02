@@ -1,9 +1,9 @@
 # PYTHON MODEL FOR SUPERSTORE PRODUCT
 from datetime import datetime
 
-class SuperStoreProduct():
-  def __init__(self, name, image, price, unit, is_on_sale, product_comparison_price, product_comparison_unit, brand="superstore"):
-    if(is_on_sale is not ""):
+class SaveOnFoodProduct():
+  def __init__(self, name, image, price, unit, is_on_sale, product_comparison_price, product_comparison_unit, brand="saveonfood"):
+    if((is_on_sale is not "") and (is_on_sale is not False)):
       is_on_sale = True
     else:
       is_on_sale = False

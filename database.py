@@ -14,14 +14,13 @@ client = MongoClient()
 # Function
 def connectMongoClient():
   global client
-  configURI = "mongodb://" + user + ":" + password + "@" + server + ":" + port + "/" + database + "?authSource=admin"
-  # configURI = "mongodb://localhost:27017"
+  # configURI = "mongodb://" + user + ":" + password + "@" + server + ":" + port + "/" + database + "?authSource=admin"
+  configURI = "mongodb://localhost:27017"
   client = MongoClient(configURI)
   print("Connected to mongoDB!! ")
 
 def getCollection(name):
   global client
-  print("return collection: ", name)
   return client.cart[name]
 
 def findAll(collection=None, query=None):

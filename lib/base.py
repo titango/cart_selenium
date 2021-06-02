@@ -25,4 +25,4 @@ class BasePage():
     return bool(element)
 
   def locateElement(self, locator):
-    return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(locator))
+    return WebDriverWait(self.driver, 7).until(EC.visibility_of_element_located(locator))
