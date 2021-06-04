@@ -30,12 +30,28 @@ def findAll(collection=None, query=None):
     raise Exception("query is empty")
   return collection.find(query)
 
+def findOne(collection=None, query=None):
+  if(collection is None):
+    raise Exception("collection is empty")
+  if(query is None):
+    raise Exception("query is empty")
+  return collection.find_one(query)
+
 def insertOne(collection=None, data=None):
   if(collection is None):
     raise Exception("collection is empty")
   if(data is None):
     raise Exception("data is empty")
   return collection.insert_one(data)
+
+def updateOne(collection=None,condition=None, data=None):
+  if(collection is None):
+    raise Exception("collection is empty")
+  if(condition is None):
+    raise Exception("condition is empty")
+  if(data is None):
+    raise Exception("data is empty")
+  return collection.update_one(condition, data)
 
 def closeClient():
   global client

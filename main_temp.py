@@ -11,7 +11,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from models.product_comparison_table import ComparisonTable
 from lib.saveonfood import SaveOnFoodPage
 
-
 def main():
   driver = webdriver.Chrome()
   sp = SaveOnFoodPage(driver)
