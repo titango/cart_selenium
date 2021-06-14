@@ -1,8 +1,9 @@
 # PYTHON MODEL FOR SUPERSTORE PRODUCT
 from datetime import datetime
 
-class SuperStoreProduct():
-  def __init__(self, name="", image="", price="", unit="", is_on_sale=False, product_comparison_price="", product_comparison_unit="", brand="superstore"):
+class Product():
+  def __init__(self, name="", image="", price="", unit="", is_on_sale=False, product_comparison_price="", 
+  product_comparison_unit="", product="", updated=False, brand=""):
     if((is_on_sale is not "") and (is_on_sale is not False)):
       is_on_sale = True
     else:
@@ -15,6 +16,14 @@ class SuperStoreProduct():
     self.is_on_sale = is_on_sale
     self.product_comparison_price = product_comparison_price.replace("$","").strip()
     self.product_comparison_unit = product_comparison_unit.replace("/","").strip()
+    self.product = product
+    self.brand = brand
+    self.updated = updated
+
+  def addProduct(self, product=""):
+    self.product = product
+
+  def addBrand(self, brand=""):
     self.brand = brand
 
   def exportJSON(self):
@@ -28,5 +37,7 @@ class SuperStoreProduct():
       "comparisonUnit": self.product_comparison_unit,
       "locked": False,
       "brand": self.brand,
+      "updated": self.updated,
+      "product": self.product,
       "createdAt": datetime.now()
     }

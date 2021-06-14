@@ -4,7 +4,7 @@ from datetime import datetime
 
 from .base import BasePage
 from .saveonfood_locator import Locators
-from models.saveonfood_product import SaveOnFoodProduct
+from models.product import Product
 
 def try_find_element(element, name, get_text):
   try:
@@ -62,8 +62,8 @@ class SaveOnFoodPage(BasePage):
         product_comparison_unit = com_converted[1]
 
         product_list.append(
-          SaveOnFoodProduct(product_name,product_image, product_price, 
-          product_unit, product_is_on_sale, product_comparison_price, product_comparison_unit, "saveonfood")
+          Product(product_name,product_image, product_price, 
+          product_unit, product_is_on_sale, product_comparison_price, product_comparison_unit, "","saveonfood")
         )
         count += 1
         if(count == 1):

@@ -7,6 +7,11 @@ port = config('MONGODB_PORT')
 database = config('MONGODB_DATABASE')
 user = config('MONGODB_USER')
 password = config('MONGODB_PASSWORD')
+staging_server = config('STAGING_MONGODB_SERVER')
+staging_port = config('STAGING_MONGODB_PORT')
+staging_database = config('STAGING_MONGODB_DATABASE')
+staging_user = config('STAGING_MONGODB_USER')
+staging_password = config('STAGING_MONGODB_PASSWORD')
 
 # Create client
 client = MongoClient()
@@ -15,6 +20,7 @@ client = MongoClient()
 def connectMongoClient():
   global client
   # configURI = "mongodb://" + user + ":" + password + "@" + server + ":" + port + "/" + database + "?authSource=admin"
+  # configURI = "mongodb://" + staging_user + ":" + staging_password + "@" + staging_server + ":" + staging_port + "/" + staging_database + "?authSource=admin"
   configURI = "mongodb://localhost:27017"
   client = MongoClient(configURI)
   print("Connected to mongoDB!! ")

@@ -2,7 +2,7 @@ from selenium.webdriver.common.keys import Keys
 from .base import BasePage
 from .superstore_locator import Locators
 from datetime import datetime
-from models.superstore_product import SuperStoreProduct
+from models.product import Product
 
 def try_find_element(element, name, get_text):
   try:
@@ -51,8 +51,8 @@ class SuperStorePage(BasePage):
         product_comparison_price = try_find_element(li, Locators.PRODUCT_COMPARISON_PRICE[1], True)
         product_comparison_unit = try_find_element(li, Locators.PRODUCT_COMPARISON_UNIT[1], True)
         product_list.append(
-          SuperStoreProduct(product_name,product_image, product_price, 
-          product_unit, product_is_on_sale, product_comparison_price, product_comparison_unit)
+          Product(product_name,product_image, product_price, 
+          product_unit, product_is_on_sale, product_comparison_price, product_comparison_unit, "", "superstore")
         )
         count += 1
         if(count == 1):
