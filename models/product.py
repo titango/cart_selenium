@@ -18,13 +18,8 @@ class Product():
     self.product_comparison_unit = product_comparison_unit.replace("/","").strip()
     self.product = product
     self.brand = brand
+    self.locked = False
     self.updated = updated
-
-  def addProduct(self, product=""):
-    self.product = product
-
-  def addBrand(self, brand=""):
-    self.brand = brand
 
   def exportJSON(self):
     return {
@@ -35,9 +30,27 @@ class Product():
       'onSale': self.is_on_sale,
       "comparisonPrice": float(self.product_comparison_price) if self.product_comparison_price is not "" else self.product_comparison_price,
       "comparisonUnit": self.product_comparison_unit,
-      "locked": False,
+      "locked": self.locked,
       "brand": self.brand,
       "updated": self.updated,
       "product": self.product,
       "createdAt": datetime.now()
     }
+
+  def getName(self):
+    return self.name
+
+  def getUpdated(self):
+    return self.updated
+
+  def setProduct(self, product=""):
+    self.product = product
+
+  def setBrand(self, brand=""):
+    self.brand = brand
+
+  def setLocked(self, locked=False):
+    self.locked = locked
+
+  def setUpdated(self, update=False):
+    self.updated = update

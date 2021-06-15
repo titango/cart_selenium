@@ -63,7 +63,7 @@ class SaveOnFoodPage(BasePage):
 
         product_list.append(
           Product(product_name,product_image, product_price, 
-          product_unit, product_is_on_sale, product_comparison_price, product_comparison_unit, "","saveonfood")
+          product_unit, product_is_on_sale, product_comparison_price, product_comparison_unit, "", False, "saveonfood")
         )
         count += 1
         if(count == 1):

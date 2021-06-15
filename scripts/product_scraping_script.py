@@ -31,32 +31,30 @@ def run(ProductClass, ProductPage, brand, times=None):
 
     count = 0
     for prod in all_products:
-      # Search for name and find all site's products (usually get first one)
-      sp.search(prod['name'])
-      superstore_list = sp.getAllSearchedlProducts()
 
       # let's find existed comparison object first
       found_comp = database.findOne(comparison_collection, {'product': prod['_id']})
       
       # If found -> We check for store_product and try to find the brand
       if(found_comp is not None):
-        # print("Product comparison existed: ", found_comp['_id'])
 
         # Find store product within the comparison object 
         found_store = try_find_store_product(found_comp['store_product'], brand)
 
         if(found_store is None): # We add new data to the array and insert back
           existed_store_arr = found_comp['store_product']
-          superstore_inserted = insert_to_store_mongo(superstore_list, prod, superstore_collection, ProductClass, brand)
+          superstore_inserted = insert_to_store_mongo(sp, prod, superstore_collection, ProductClass, brand)
           existed_store_arr.append(superstore_inserted.inserted_id)
           database.updateOne(comparison_collection, {"_id": found_comp['_id']}, {"$set": {"store_product": existed_store_arr}})
 
         else: # In here if we found the brand, we need to check for the lock status
           if((found_store['locked'] is None) or (found_store['locked']== False)):
-            update_existed_store(superstore_list, prod, superstore_collection, found_store)
+            update_existed_store(sp, prod, superstore_collection, found_store)
+          else:
+            update_existed_store_using_store_name(sp, prod, superstore_collection, found_store)
 
       else: # Insert new one into the mongo
-        superstore_inserted = insert_to_store_mongo(superstore_list, prod, superstore_collection, ProductClass, brand)
+        superstore_inserted = insert_to_store_mongo(sp,prod, superstore_collection, ProductClass, brand)
         # Create comparison and insert
         compare_table = ComparisonTable(prod['_id'], superstore_inserted.inserted_id)
         database.insertOne(comparison_collection, compare_table.exportJSON())
@@ -78,6 +76,11 @@ def run(ProductClass, ProductPage, brand, times=None):
   # End the browser
   driver.quit()
 
+def searchProduct(sp, name=""):
+  sp.search(name)
+  superstore_list = sp.getAllSearchedlProducts()
+  return superstore_list
+
 def try_find_store_product(store_arr, brand):
   superstore_collection = database.getCollection("store_products")
   for each_id in store_arr:
@@ -88,24 +91,36 @@ def try_find_store_product(store_arr, brand):
         return found_store
   return None
 
-def insert_to_store_mongo(superstore_list, ditu_product, superstore_collection, ProductClass, brand):
+def insert_to_store_mongo(sp, ditu_product, superstore_collection, ProductClass, brand):
   # If have any product connect to mongodb
+  superstore_list = searchProduct(sp, ditu_product['name'])
   if(len(superstore_list) > 0):
     for su in superstore_list:
       # Insert to superstore model
-      su.addProduct(ditu_product['_id'])
+      su.setProduct(ditu_product['_id'])
       superstore_inserted = database.insertOne(superstore_collection, su.exportJSON())
       return superstore_inserted
   else:
     # Create an empty object
     obj = ProductClass()
-    obj.addBrand(brand)
-    obj.addProduct(ditu_product['_id'])
+    obj.setBrand(brand)
+    obj.setProduct(ditu_product['_id'])
     # Insert into superstore with empty object
     superstore_inserted = database.insertOne(superstore_collection, obj.exportJSON())
     return superstore_inserted
 
-def update_existed_store(superstore_list, ditu_product, superstore_collection, found_store):
+def update_existed_store(sp, ditu_product, superstore_collection, found_store):
+  superstore_list = searchProduct(sp, ditu_product['name'])
   for su in superstore_list:
-    su.addProduct(ditu_product['_id'])
+    su.setProduct(ditu_product['_id'])
     database.updateOne(superstore_collection, {"_id": found_store['_id']}, {"$set": su.exportJSON()})
+
+def update_existed_store_using_store_name(sp, ditu_product, superstore_collection, found_store):
+  up = found_store['updated']
+  if((up is not None) and (up is True)):
+    superstore_list = searchProduct(sp, found_store['name'])
+    for su in superstore_list:
+      su.setProduct(ditu_product['_id'])
+      su.setLocked(True)
+      su.setUpdated(True)
+      database.updateOne(superstore_collection, {"_id": found_store['_id']}, {"$set": su.exportJSON()})
