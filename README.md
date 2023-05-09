@@ -1,4 +1,4 @@
-# SELENIUM PRORJECT FOR QUERYING PRODUCT FROM SUPERMARKET
+# Selenium Prorject For Querying Product From Supermarket
 This project is used to query different products info from supermarket's sites and return JSON or import to MONGODB
 
 ---
